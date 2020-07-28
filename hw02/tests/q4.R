@@ -8,7 +8,7 @@ cases:
     hidden: false
     points: 1
   - name: q4b
-    hidden: false
+    hidden: true
     points: 1
 "
 
