@@ -25,7 +25,9 @@ Each assignment is actually the same; all that varies is the file type. To run `
 To build the autograder, use the `otter` command-line utility. In your terminal, `cd` into one of the `hw0*` directories and run the following:
 
 ```console
-otter generate autograder -r requirements.R data
+otter generate autograder -l r -r requirements.R data
 ```
 
 This will create a zip file in that directory called `autograder.zip` which you can upload to Gradescope to build the autograder. Then test the autograder by uploading _any_ of the solutions files (`hw00.R`, `hw01.Rmd`, or `hw02.ipynb`) to the assignment. _Regardless of which directory you generate the zip file from, the any solution file format should work_ as the Gradescope autograder is agnostic of file type.
+
+**Please try changing various combinations of answers in each file type** to verify that the scores are correct for different possible answers.
