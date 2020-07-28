@@ -10,10 +10,10 @@ To use ottr, you need to install the package using `devtools::install_github`:
 devtools::install_github("ucbds-infra/ottr")
 ```
 
-To create the grading configurations for Gradescope, you will need the Python package for Otter installed. This functionality is currently only supported by the beta release, so you need to explicity specify a version.
+To create the grading configurations for Gradescope, you will need the Python package for Otter installed. This functionality is currently only supported by one branch on GitHub, so you will need to install from git:
 
 ```console
-pip install otter-grader==1.0.0.b7
+pip install git+https://github.com/ucbds-infra/otter-grader.git@ottr
 ```
 
 ## Running the Assignments

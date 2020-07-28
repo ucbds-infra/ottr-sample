@@ -1,1 +1,1 @@
-otter-grader
+git+https://github.com/ucbds-infra/otter-grader.git@ottr
