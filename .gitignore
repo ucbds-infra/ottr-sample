@@ -3,3 +3,4 @@ __pycache__
 .Rproj.user
 .Rhistory
 autograder.zip
+dist
