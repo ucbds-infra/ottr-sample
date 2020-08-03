@@ -85,28 +85,37 @@ The last thing to do is upload your zip file to Gradescope and start grading!
 
 ## Using Ottr with Otter Assign
 
-Otter Assign is also compatible with creating R Jupyter notebooks. The format is very similar to the regular assign format, and an example notebook is provided in `assign/hw02.ipynb` which will generate the sample notebook and tests as `hw02` but with an additional written question. Some notes about the R Otter Assign format:
+### R Jupyter Notebooks
+
+Otter Assign is also compatible with creating R Jupyter notebooks. The format is very similar to the regular assign format, and an example notebook is provided in `hw02-assign/hw02.ipynb` which will generate the sample notebook and tests as `hw02` but with an additional written question. Some notes about the R Otter Assign format:
 
 * Make sure that all code in a test cell is wrapped in a call to `testthat::test_that` and that there is only _one_ call to `testthat::test_that` in each test cell. For example, instead of
+
 ```r
 data = data.frame()
 test_that("q1", {
     # some test
 })
 ```
+
 do the following:
+
 ```r
 test_that("q1", {
     data = data.frame()
     # some test
 })
 ```
+
 * The `points` key of the question metadata has two options: if a number, this will be divided by the number of test cases $n$ so that each test case is worth $\frac{\text{points}}{n}$. If it is a list, it should have the same number of elements as the number of test cases and then each test case will be worth its corresponding element in the points list. For example, if there are 5 tests,
+
 ```yaml
 name: q1
 points: 4
 ```
+
 indicates that each test should be worth 0.8 points and
+
 ```yaml
 name: q1
 points:
@@ -116,21 +125,23 @@ points:
     - 4
     - 5
 ```
+
 indicates that the first case is worth 1 point, the second is worth 2 points, etc.
+
 * Some unsupported features (e.g. running the tests after generating the autograder notebook, serializing environments) are as yet unsupported with ottr/Otter Assign + R. These configurations are therefore ignored.
 * Be sure to look at Question 4 in the master notebook to see how the custom prompt format has changed.
 
-When you're ready to run Otter Assign, `cd` into `assign` and then run the following:
+When you're ready to run Otter Assign, `cd` into `hw02-assignassign` and then run the following:
 
 ```console
-$ otter assign hw02.ipynb dist -l r
+$ otter assign hw02.ipynb dist
 Generating views...
 Generating solutions PDF...
 Generating template PDF...
 Generating autograder zipfile...
 ```
 
-As with Otter Generate, the `-l r` flag tells Otter Assign that this is an R notebook. The other configurations are taken care of in the assignment configuration in the notebook.
+All configurations are taken care of in the assignment configuration in the notebook. We don't need to specify the `-l r` flag because Otter Assign will use the kernel information in the notebook to auto-detect the language of the assignment.
 
 Once you run Otter Assign, you should have a new `dist` directory that looks like this:
 
@@ -160,3 +171,13 @@ Once you run Otter Assign, you should have a new `dist` directory that looks lik
 ```
 
 Look through the files; they should be the same as those in the root `dist-correct` directory. Otter Assign was also configured to generate an `autograder.zip` file, so you can also check that that works by uploading your zip file to Gradescope and grading the solutions notebook.
+
+### Rmd Documents
+
+Otter Assign is now compatible with Rmd files as well. The `hw01-assign` directory contains the `hw01.Rmd` assignment as an Otter Assign for Rmd formatted document. Using Otter Assign with Rmd files is the same as normal Otter Assign:
+
+```console
+otter assign hw01.Rmd dist
+```
+
+Take a look at the Rmd file to see what the notebook format is like. Solution removal behaviors are the same as Otter Assign for Juptyer notebooks as is the question metadata format. More detailed documentation to come.

@@ -2,5 +2,4 @@ __pycache__
 .ipynb_checkpoints
 .Rproj.user
 .Rhistory
-autograder.zip
 dist
