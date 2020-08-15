@@ -6,8 +6,6 @@ output: pdf_document
 
 ```
 BEGIN ASSIGNMENT
-solutions_pdf: true
-template_pdf: true
 requirements: requirements.R
 generate: true
 files:
