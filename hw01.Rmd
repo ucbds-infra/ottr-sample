@@ -8,8 +8,10 @@ output: pdf_document
 BEGIN ASSIGNMENT
 requirements: requirements.R
 generate: true
-files:
-  - data
+seed:
+    variable: rng_seed
+    autograder_value: 42
+    student_value: 90
 ```
 
 ```{r setup, include=FALSE}
@@ -19,47 +21,69 @@ knitr::opts_chunk$set(echo = TRUE)
 # Otter Assign for Rmd Sample
 
 ```{r}
-library(datasets)
-library(dplyr)
-library(readr)
 library(ggplot2)
+library(latex2exp)
+rng_seed = 42
 ```
 
-**Question 1:** Load the `iris` dataset. Use dplyr's `filter` function to create `setosas` as the subset of `iris` containing only setosas.
+**Question 1.** Write a function called `sieve` that takes in a positive integer `n` and returns a `set` of the prime numbers less than or equal to `n`. Use the Sieve of Eratosthenes to find the primes.
 
 ```
 BEGIN QUESTION
 name: q1
-points: 3
+points: 2
 ```
 
 ```{r}
-data(iris)                                        # SOLUTION
-setosas <- iris %>% filter(Species == "setosa")   # SOLUTION
-```
-
-```{r}
-## Test ##
-testthat::expect_equal(nrow(iris), 150)
-testthat::expect_equal(length(names(iris)), 5)
-for (col_name in c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")) {
-  testthat::expect_true(col_name %in% names(iris))
+sieve = function(n) {
+  # BEGIN SOLUTION
+  is_prime = rep(TRUE, n)
+  p = 2
+  while (p^2 <= n) {
+    if (is_prime[p]) {
+      is_prime[seq(p^2, n, p)] = FALSE
+    }
+    p = p + 1
+  }
+  is_prime[1] = FALSE
+  return(seq(n)[is_prime])
+  # END SOLUTION
 }
 ```
 
 ```{r}
 ## Test ##
-testthat::expect_equal(nrow(setosas), 50)
-testthat::expect_equal(length(unique(setosas$Species)), 1)
+testthat::expect_equal(length(sieve(1)), 0)
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(sieve(2), c(2))
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(sieve(3), c(2, 3))
 ```
 
 ```{r}
 ## Hidden Test ##
-testthat::expect_equal(length(unique(iris$Species)), 3)
-testthat::expect_equal(iris[1, "Sepal.Length"], 5.1)
+testthat::expect_equal(sieve(20), c(2, 3, 5, 7, 11, 13, 17, 19))
 ```
 
-**Question 2:** We are going to regress sepal length on sepal width and indicator variables for the iris species. Write down the regression equation for this model.
+```{r}
+. = " # BEGIN TEST CONFIG
+points: 1
+hidden: true
+" # END TEST CONFIG
+testthat::expect_equal(sieve(100), c(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97))
+```
+
+**Question 2.** Evaluate the integral:
+
+$$
+\int x e^x \, \mathrm dx
+$$
 
 ```
 BEGIN QUESTION
@@ -68,123 +92,183 @@ manual: true
 ```
 
 <!-- BEGIN PROMPT -->
-$$ y = \texttt{# YOUR MATH HERE} $$
+$$
+\begin{aligned}
+\int x e^x \, \mathrm dx &= \texttt{YOUR MATH HERE} \\
+\end{aligned}
+$$
 <!-- END PROMPT -->
 
 <!-- BEGIN SOLUTION -->
-$$ y = \beta_0 + \beta_1 \texttt{sepal_width} + \beta_2 \mathbb{1} \left \{ \texttt{species} = \text{setosa} \right \} +\beta_3 \mathbb{1} \left \{ \texttt{species} = \text{versicolor} \right \} $$
-
-Any two of the possible species are OK as long as you used only two. (Adding a third would make our design matrix non-invertible.)
+$$
+\begin{aligned}
+\int x e^x \, \mathrm dx &= x e^x - \int e^x \, \mathrm dx \\
+&= x e^x - e^x + C \\
+&= e^x (x - 1) + C \\
+\end{aligned}
+$$
 <!-- END SOLUTION -->
 
-**Question 3:** Using the `iris` dataset, create two indicator variables for the iris species and then create a linear regression model regressing sepal length on sepal width and the species dummy variables.
-
+**Question 3.** Graph the function $f(x) = \arctan \left ( e^x \right )$.
 ```
 BEGIN QUESTION
 name: q3
-points: 3
-```
-
-```{r}
-# BEGIN SOLUTION
-iris$setosa = iris$Species == "setosa"
-iris$versicolor = iris$Species == "versicolor"
-model = lm(Sepal.Length ~ Sepal.Width + setosa + versicolor, data=iris)
-# END SOLUTION
-```
-
-```{r}
-## Test ##
-testthat::expect_equal(length(names(iris)), 7)
-for (col_name in c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species")) {
-  testthat::expect_true(col_name %in% names(iris))
-}
-testthat::expect_equal(length(names(iris)[names(iris) %in% iris$Species]), 2)
-```
-
-```{r}
-## Test ##
-testthat::expect_equal(length(model$coefficients), 4)
-testthat::expect_true("Sepal.Width" %in% names(model$coefficients))
-testthat::expect_true("Sepal.Length" %in% colnames(model$model))
-testthat::expect_false("Sepal.Length" %in% names(model$coefficients))
-```
-
-```{r}
-## Hidden Test ##
-for (col_name in names(iris)) {
-  if (!(col_name %in% c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species"))) {
-    testthat::expect_equal(sum(iris[, col_name]), 50)
-  }
-}
-if ("setosa" %in% names(iris)) {
-  setosas = iris %>% filter(setosa == 1)
-  testthat::expect_equal(mean(setosas$Petal.Length), 1.462)
-}
-if ("versicolor" %in% names(iris)) {
-  versicolors = iris %>% filter(versicolor == 1)
-  testthat::expect_equal(mean(versicolors$Petal.Length), 4.26)
-}
-```
-
-**Question 4:** Use dplyr to load `data/galton.csv`. Create a linear regression model of child height on father and mother height.
-
-```
-BEGIN QUESTION
-name: q4
-points:
-  - 0
-  - 2
-```
-
-```{r}
-# BEGIN SOLUTION
-galton = read_csv("data/galton.csv")
-model = lm(childHeight ~ mother + father, data=galton)
-# END SOLUTION
-```
-
-```{r}
-## Test ##
-testthat::expect_equal(length(model$coefficients), 3)
-testthat::expect_true("father" %in% names(model$coefficients))
-testthat::expect_true("mother" %in% names(model$coefficients))
-```
-
-```{r}
-## Hidden Test ##
-tol = 1e-5
-actual_values = c(22.6432797, 0.3682823, 0.2905100)
-coeffs = model$coefficients[c("(Intercept)", "father", "mother")]
-for (i in 1:3) {
-  testthat::expect_true(coeffs[i] > actual_values[i] - tol)
-  testthat::expect_true(coeffs[i] < actual_values[i] + tol)
-}
-```
-
-**Question 5:** Regress the child height on `midparentHeight` and plot the regression line and the data points.
-
-```
-BEGIN QUESTION
-name: q5
 manual: true
 ```
 
 ```{r}
 # BEGIN SOLUTION
-model = lm(childHeight ~ midparentHeight, data=galton)
+xs = seq(-10, 10, length.out=100)
+ys = atan(exp(xs))
 
-data_x = galton$childHeight
-line_x = seq(min(data_x), max(data_x), length.out=length(data_x))
-
-data_y = galton$midparentHeight
-line_y = model$coefficients[[1]] + model$coefficients[[2]] * line_x
-
-ggplot(data.frame(data_x, data_y, line_x, line_y), aes()) +
-  geom_line(aes(x=line_x, y=line_y, color="red")) + 
-  geom_point(aes(x=data_x, y=data_y)) +
-  xlab("child height") +
-  ylab("midparent height") +
+ggplot(data.frame(xs, ys), aes(x=xs, y=ys)) +
+  geom_line() +
+  xlab(TeX("$x$")) +
+  ylab(TeX("$f(x)$")) +
+  labs(title=TeX(r"($f(x) = \arctan ( e^x )$)")) +
   theme(legend.position = "none")
 # END SOLUTION
+```
+
+**Question 4.** Write a function `hailstone` that returns the hailstone sequence for a positive integer ``n`` as a ``list``.
+
+```
+BEGIN QUESTION
+name: q4
+```
+
+```{r}
+hailstone = function(n) {
+  # BEGIN SOLUTION
+  if (n == 1) return(c(n))
+  else if (n %% 2 == 0) return(c(n, hailstone(n %/% 2)))
+  else return(c(n, hailstone(3 * n + 1)))
+  # END SOLUTION
+}
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(hailstone(1), c(1))
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(hailstone(2), c(2, 1))
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(hailstone(4), c(4, 2, 1))
+```
+
+```{r}
+. = " # BEGIN TEST CONFIG
+points: 1.5
+hidden: true
+" # END TEST CONFIG
+testthat::expect_equal(hailstone(20), c(20, 10, 5, 16, 8, 4, 2, 1))
+```
+
+```{r}
+. = " # BEGIN TEST CONFIG
+points: 1.5
+hidden: true
+" # END TEST CONFIG
+testthat::expect_equal(hailstone(9), c(9, 28, 14, 7, 22, 11, 34, 17, 52, 26, 13, 40, 20, 10, 5, 16, 8, 4, 2, 1))
+```
+
+**Question 5.** Write a function ``gcd`` that takes in two positive integers ``a`` and ``b`` and returns their greatest common divisor.
+
+```
+BEGIN QUESTION
+name: q5
+```
+
+```{r}
+gcd = function(a, b) {
+    # BEGIN SOLUTION
+    if (a == 0) return(b)
+    return(gcd(b %% a, a))
+    # END SOLUTION
+}
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(gcd(1, 1), 1)
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(gcd(2, 1), 1)
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(gcd(5, 5), 5)
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(gcd(10, 4), 2)
+```
+
+```{r}
+. = " # BEGIN TEST CONFIG
+points: 0.5
+hidden: true
+" # END TEST CONFIG
+testthat::expect_equal(gcd(121, 11), 11)
+```
+
+```{r}
+. = " # BEGIN TEST CONFIG
+points: 0.5
+hidden: true
+" # END TEST CONFIG
+testthat::expect_equal(gcd(807306, 622896), 4098)
+```
+
+**Question 6.** Write a function `box_muller` that takes in two $U(0,1)$ random variables and returns two standard normal random variables using the Box-Muller algorithm. Use this function to generate 1000 standard normal random variables. Make sure to use the provided RNG to generate your $U(0,1)$ RVs.
+
+```
+BEGIN QUESTION
+name: q6
+```
+
+```{r}
+set.seed(rng_seed)
+
+box_muller = function(u1, u2) {
+    # BEGIN SOLUTION
+    r = sqrt(-2 * log(u1))
+    theta = 2 * pi * u2
+    return(c(r * cos(theta), r * sin(theta)))
+    # END SOLUTION
+}
+
+rvs = as.vector(mapply(box_muller, runif(500), runif(500))) # SOLUTION
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(length(rvs), c(1000))
+testthat::expect_equal(dim(rvs), NULL)
+```
+
+```{r}
+## Test ##
+testthat::expect_equal(box_muller(0.5, 0.5), c(-1.1774100225154747, 1.4419114153575892e-16), tolerance=1e-5)
+```
+
+```{r}
+. = " # BEGIN TEST CONFIG
+points: 1
+hidden: true
+" # END TEST CONFIG
+set.seed(1048)
+smpl = sample(rvs, 10)
+testthat::expect_equal(smpl, c(0.488075015538835, 0.194588102062245, 0.166299257619479, 0.835872276439119, 1.24125215479332,
+                               -0.249328292625541, -0.823870507269021, 0.610713558462346, -0.212479727693556, -1.63148721078593))
 ```
