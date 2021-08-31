@@ -8,6 +8,7 @@ output: pdf_document
 BEGIN ASSIGNMENT
 requirements: requirements.R
 generate: true
+solutions_pdf: true
 seed:
     variable: rng_seed
     autograder_value: 42
