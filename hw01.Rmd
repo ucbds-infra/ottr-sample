@@ -126,7 +126,7 @@ ggplot(data.frame(xs, ys), aes(x=xs, y=ys)) +
   geom_line() +
   xlab(TeX("$x$")) +
   ylab(TeX("$f(x)$")) +
-  labs(title=TeX(r"($f(x) = \arctan ( e^x )$)")) +
+  labs(title=TeX("f(x) = arctan (e^x)")) +
   theme(legend.position = "none")
 # END SOLUTION
 ```
