@@ -54,7 +54,7 @@ After running Otter Assign, you'll end up with two versions of the notebook: one
 
 ## Using Ottr for Other Assignments
 
-To use ottr for your own assignments, you'll want to start by writing an assignment and test files like those found in the `dist/*` directories. When writing checks in assignments, `ottr::check` _must_ be called in this format or else Gradescope won't be able to collect the results properly:
+To use ottr for your own assignments, you'll want to start by writing an assignment and test files like those found in the `dist/*` directories. Use the `ottr::check` function to run your test case files against the current R environment:
 
 ```r
 . = ottr::check("relative/path/to/test/file")
