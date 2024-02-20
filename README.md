@@ -22,31 +22,31 @@ pip install otter-grader
 
 ### R Jupyter Notebooks
 
-Otter Assign is compatible with creating R Jupyter notebooks. The format is very similar to the regular assign format, and an example notebook is provided in `hw01.ipynb` which will generate the sample notebook and tests as `hw02` but with an additional written question. Some notes about the R Otter Assign format:
+Otter Assign is compatible with creating R Jupyter notebooks. The format is very similar to the regular assign format, and an example notebook is provided in `hw01.ipynb`.
 
 To use Otter Assign, run
 
 ```console
-otter assign hw01.ipynb dist --v1
+otter assign hw01.ipynb dist
 ```
-
-(The `--v1` flag indicates that this notebook uses the [v1 format of Otter Assign](https://otter-grader.readthedocs.io/en/latest/otter_assign/index.html).)
 
 All configurations are taken care of in the assignment configuration in the notebook. We don't need to specify the `-l r` flag because Otter Assign will use the kernel information in the notebook to auto-detect the language of the assignment.
 
-Look through the files in the new `dist` directory. Otter Assign was also configured to generate an `autograder.zip` file, so you can also check that that works by uploading your zip file to Gradescope and grading the solutions notebook.
+Look through the files in the new `dist` directory. Otter Assign was also configured to generate an autograder configuration zip file, so you can also check that that works by grading the solutions notebook [locally](https://otter-grader.readthedocs.io/en/latest/workflow/executing_submissions/otter_grade.html) or on Gradescope.
+
+You can find more information about the Otter Assign format for notebooks (both Python and R) [here](https://otter-grader.readthedocs.io/en/latest/otter_assign/notebook_format.html).
 
 ### Rmd Documents
 
 Otter Assign is compatible with Rmd files as well. The `hw01.Rmd` file contains the same assignment as `hw01.ipynb` but as an Rmd document. Using Otter Assign with Rmd files is the same as normal Otter Assign:
 
 ```console
-otter assign hw01.Rmd dist --v1
+otter assign hw01.Rmd dist
 ```
 
 Take a look at the Rmd file to see what the format is like. Solution removal behaviors are the same as Otter Assign for Juptyer Notebooks as is the question metadata format.
 
-You can find more information about the Otter Assign formats for R [here](https://otter-grader.readthedocs.io/en/latest/otter_assign/v1/index.html).
+You can find more information about the Otter Assign formats for R markdown [here](https://otter-grader.readthedocs.io/en/latest/otter_assign/rmd_format.html).
 
 ## Running the Assignments
 
