@@ -4,10 +4,10 @@ This repository contains three example assignments to demonstrate how to use [Ot
 
 ## Installation
 
-To use ottr, you need to install the package using `devtools::install_github`:
+To use ottr, you need to install the package using `install.packages`:
 
 ```r
-devtools::install_github("ucbds-infra/ottr@stable")
+install.packages("ottr")
 ```
 
 This will install the most recent stable release of ottr.
@@ -47,6 +47,18 @@ otter assign hw01.Rmd dist
 Take a look at the Rmd file to see what the format is like. Solution removal behaviors are the same as Otter Assign for Juptyer Notebooks as is the question metadata format.
 
 You can find more information about the Otter Assign formats for R markdown [here](https://otter-grader.readthedocs.io/en/latest/otter_assign/rmd_format.html).
+
+### Quarto Documents
+
+Otter Assign is compatible with Quarto files as well. The `hw01.qmd` file contains the same assignment as `hw01.ipynb` but as a Quarto document. Using Otter Assign with Quarto files is the same as normal Otter Assign:
+
+```console
+otter assign hw01.qmd dist
+```
+
+Take a look at the Quarto file to see what the format is like. Solution removal behaviors are the same as Otter Assign for Juptyer Notebooks as is the question metadata format.
+
+You can find more information about the Otter Assign formats for Quarto [here](https://otter-grader.readthedocs.io/en/latest/otter_assign/qmd_format.html).
 
 ## Running the Assignments
 
